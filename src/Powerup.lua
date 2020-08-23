@@ -10,7 +10,7 @@ function Powerup:init(skin) --skin will be which powerup it is
     self.x = VIRTUAL_WIDTH / 2 - 32
 
     -- 
-    self.y = VIRTUAL_HEIGHT - 64
+    self.y = 0
 
     -- start  off with no velocity
     self.dx = 0
@@ -21,16 +21,31 @@ function Powerup:init(skin) --skin will be which powerup it is
 
     -- the 
     self.skin = 1
-    self.inplay = true
+    self.falling = true
 
 end
 
 function Powerup:update(dt)
-    self.x = self.x + self.dx * dt
-    self.y = self.y + self.dy * dt
+
+   if not self.falling then --make sure powerup does not spawn while another is
+     if random == 5 then
+     self.y = 0 --powerup spawn
+     self.falling = true
+     end
+   end
+
+    if self.falling then --gravity
+    self.y = self.y + 1
+    end
+
+    if self.y > VIRTUAL_HEIGHT then
+        self.falling = false
+    end
 end
 
 function Powerup:render()
+    if self.falling then
     love.graphics.draw(gTextures['main'], gFrames['powerups'][self.skin], --i don't get how this works, what does the code in the brakets next to the " gFrames['powerups']" do?
     self.x, self.y)
+    end
 end
