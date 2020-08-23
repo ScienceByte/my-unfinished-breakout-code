@@ -23,24 +23,30 @@ PlayState = Class{__includes = BaseState}
 function PlayState:enter(params)
 
     self.powerup = Powerup()
-    
 
     self.paddle = params.paddle
     self.bricks = params.bricks
     self.health = params.health
     self.score = params.score
     self.highScores = params.highScores
-    self.ball = params.ball
+    self.balls = params.balls
     self.level = params.level
-   
+
     self.recoverPoints = 5000 
     
     -- give ball random starting velocity
-    self.ball.dx = math.random(-200, 200)
-    self.ball.dy = math.random(-50, -60)
+    --ball.dx = math.random(-200, 200)
+    --ball.dy = math.random(-50, -60)
+    
 end
 
 function PlayState:update(dt)
+
+
+
+
+
+
     if self.paused then
         if love.keyboard.wasPressed('space') then
             self.paused = false
@@ -56,7 +62,11 @@ function PlayState:update(dt)
 
     -- update positions based on velocity
     self.paddle:update(dt)
-    self.ball:update(dt)
+
+    for k, ball in pairs(balls) do
+        ball:update(dt)
+    end
+    
     self.powerup:update(dt)
 
     if self.ball:collides(self.paddle) then
@@ -222,8 +232,12 @@ function PlayState:render()
     end
 
     self.paddle:render()
-    self.ball:render()
+ 
     self.powerup:render()
+    
+    for k, ball in pairs(balls) do
+        ball:render()
+    end
     
     renderScore(self.score)
     renderHealth(self.health)

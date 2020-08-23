@@ -26,18 +26,22 @@ function ServeState:enter(params)
     self.level = params.level
     self.recoverPoints = params.recoverPoints
 
-    -- init new ball (random color for fun)
-    self.ball = Ball()
-    self.ball.skin = math.random(7)
-
+    -- init new ball (random color for fun
+    balls = {}
+    ball = Ball()
+    --self.ball.skin = math.random(7)
+    for i = 1,2 do
+    table.insert(balls, ball)  --somethings wrong DOESNT MATCH YP
+    end
+    
     
 end
 
 function ServeState:update(dt)
     -- have the ball track the player
     self.paddle:update(dt)
-    self.ball.x = self.paddle.x + (self.paddle.width / 2) - 4
-    self.ball.y = self.paddle.y - 8
+    --self.ball.x = self.paddle.x + (self.paddle.width / 2) - 4
+    --self.ball.y = self.paddle.y - 8
 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         -- pass in all important state info to the PlayState
@@ -60,7 +64,10 @@ end
 
 function ServeState:render()
     self.paddle:render()
-    self.ball:render()
+    for k, ball in pairs(balls) do
+        ball:render()
+    end
+
 
     for k, brick in pairs(self.bricks) do
         brick:render()
