@@ -35,8 +35,8 @@ function PlayState:enter(params)
     self.recoverPoints = 5000 
     
     -- give ball random starting velocity
-    --ball.dx = math.random(-200, 200)
-    --ball.dy = math.random(-50, -60)
+    self.balls[1].dx = math.random(-200, 200)
+ self.balls[1].dy = math.random(-50, -60)
     
 end
 
@@ -63,7 +63,7 @@ function PlayState:update(dt)
     -- update positions based on velocity
     self.paddle:update(dt)
 
-    for k, ball in pairs(balls) do
+    for k, ball in pairs(self.balls) do
         ball:update(dt)
     end
     
@@ -71,9 +71,10 @@ function PlayState:update(dt)
 
     if self.ball:collides(self.paddle) then
         -- raise ball above paddle in case it goes below it, then reverse dy
-        self.ball.y = self.paddle.y - 8
-        self.ball.dy = -self.ball.dy
-
+        for i = 1,3 do
+        self.balls[i].y = self.paddle.y - 8
+        self.balls[i].dy = -self.balls[i].dy
+        end
         --
         -- tweak angle of bounce based on where it hits the paddle
         --
