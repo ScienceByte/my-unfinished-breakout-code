@@ -39,9 +39,10 @@ end
 function ServeState:update(dt)
     -- have the ball track the player
     self.paddle:update(dt)
-
-    self.balls[1].x = self.paddle.x + (self.paddle.width / 2) - 4
-    self.balls[1].y = self.paddle.y - 8
+    for i, ball in pairs(self.balls) do
+    self.balls[i].x = self.paddle.x + (self.paddle.width / 2) - 4
+    self.balls[i].y = self.paddle.y - 8
+    end
 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         -- pass in all important state info to the PlayState

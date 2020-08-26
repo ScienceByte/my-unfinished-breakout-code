@@ -29,7 +29,7 @@ function PlayState:enter(params)
     self.health = params.health
     self.score = params.score
     self.highScores = params.highScores
-    self.balls = params.balls
+    self.balls = {params.balls}
     self.level = params.level
 
     self.recoverPoints = 5000 
@@ -65,27 +65,27 @@ function PlayState:update(dt)
 
     for k, ball in pairs(self.balls) do
         ball:update(dt)
-    end
+    
     
     self.powerup:update(dt)
 
-    if self.ball:collides(self.paddle) then
+    if ball:collides(self.paddle) then
         -- raise ball above paddle in case it goes below it, then reverse dy
         for i = 1,3 do
-        self.balls[i].y = self.paddle.y - 8
-        self.balls[i].dy = -self.balls[i].dy
+        ball.y = self.paddle.y - 8
+        ball.dy = -ball.dy
         end
         --
         -- tweak angle of bounce based on where it hits the paddle
         --
 
         -- if we hit the paddle on its left side while moving left...
-        if self.ball.x < self.paddle.x + (self.paddle.width / 2) and self.paddle.dx < 0 then
-            self.ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x))
+        if ball.x < self.paddle.x + (self.paddle.width / 2) and self.paddle.dx < 0 then
+            ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - ball.x))
         
         -- else if we hit the paddle on its right side while moving right...
-        elseif self.ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
-            self.ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - self.ball.x))
+        elseif ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
+            ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - ball.x))
         end
 
         gSounds['paddle-hit']:play()
@@ -95,7 +95,7 @@ function PlayState:update(dt)
     for k, brick in pairs(self.bricks) do
 
         -- only check collision if we're in play
-        if brick.inPlay and self.ball:collides(brick) then
+        if brick.inPlay and ball:collides(brick) then
 
             -- add to score
             self.score = self.score + (brick.tier * 200 + brick.color * 25)
@@ -144,38 +144,38 @@ function PlayState:update(dt)
 
             -- left edge; only check if we're moving right, and offset the check by a couple of pixels
             -- so that flush corner hits register as Y flips, not X flips
-            if self.ball.x + 2 < brick.x and self.ball.dx > 0 then
+            if ball.x + 2 < brick.x and ball.dx > 0 then
                 
                 -- flip x velocity and reset position outside of brick
-                self.ball.dx = -self.ball.dx
-                self.ball.x = brick.x - 8
+                ball.dx = -ball.dx
+                ball.x = brick.x - 8
             
             -- right edge; only check if we're moving left, , and offset the check by a couple of pixels
             -- so that flush corner hits register as Y flips, not X flips
-            elseif self.ball.x + 6 > brick.x + brick.width and self.ball.dx < 0 then
+            elseif ball.x + 6 > brick.x + brick.width and ball.dx < 0 then
                 
                 -- flip x velocity and reset position outside of brick
-                self.ball.dx = -self.ball.dx
-                self.ball.x = brick.x + 32
+                ball.dx = -ball.dx
+                ball.x = brick.x + 32
             
             -- top edge if no X collisions, always check
-            elseif self.ball.y < brick.y then
+            elseif ball.y < brick.y then
                 
                 -- flip y velocity and reset position outside of brick
-                self.ball.dy = -self.ball.dy
-                self.ball.y = brick.y - 8
+                ball.dy = -ball.dy
+                ball.y = brick.y - 8
             
             -- bottom edge if no X collisions or top collision, last possibility
             else
                 
                 -- flip y velocity and reset position outside of brick
-                self.ball.dy = -self.ball.dy
-                self.ball.y = brick.y + 16
+                ball.dy = -ball.dy
+                ball.y = brick.y + 16
             end
 
             -- slightly scale the y velocity to speed up the game, capping at +- 150
-            if math.abs(self.ball.dy) < 150 then
-                self.ball.dy = self.ball.dy * 1.02
+            if math.abs(ball.dy) < 150 then
+                ball.dy = ball.dy * 1.02
             end
 
             -- only allow colliding with one brick, for corners
@@ -184,7 +184,7 @@ function PlayState:update(dt)
     end
 
     -- if ball goes below bounds, revert to serve state and decrease health
-    if self.ball.y >= VIRTUAL_HEIGHT then
+    if ball.y >= VIRTUAL_HEIGHT then
         self.health = self.health - 1
         gSounds['hurt']:play()
 
@@ -210,6 +210,8 @@ function PlayState:update(dt)
             })
         end
     end
+end --THIS IS WHERE THAT FOR K THING FOR THE BALLS ENDS
+
 
     -- for rendering particle systems
     for k, brick in pairs(self.bricks) do
