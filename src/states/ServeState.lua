@@ -32,8 +32,9 @@ function ServeState:enter(params)
     for i = 1,3 do
     table.insert(self.balls, Ball())  
     end
-    --self.ball.skin = math.random(7)
-    
+    for i = 1,3 do 
+    self.balls[i].skin = math.random(7)
+     end
 end
 
 function ServeState:update(dt)

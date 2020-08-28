@@ -29,14 +29,15 @@ function PlayState:enter(params)
     self.health = params.health
     self.score = params.score
     self.highScores = params.highScores
-    self.balls = {params.balls}
+    self.balls = {params.ball}
     self.level = params.level
 
     self.recoverPoints = 5000 
     
     -- give ball random starting velocity
-    self.balls[1].dx = math.random(-200, 200)
- self.balls[1].dy = math.random(-50, -60)
+    
+    --self.balls[1].dx = math.random(-200, 200) 
+    --self.balls[1].dy = math.random(-50, -60)
     
 end
 
@@ -238,7 +239,7 @@ function PlayState:render()
  
     self.powerup:render()
     
-    for k, ball in pairs(balls) do
+    for k, ball in pairs(self.balls) do
         ball:render()
     end
     
