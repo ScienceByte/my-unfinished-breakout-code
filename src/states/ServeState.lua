@@ -34,7 +34,7 @@ function ServeState:enter(params)
     end
     for i = 1,3 do 
     self.balls[i].skin = math.random(7)
-     end
+    end
 end
 
 function ServeState:update(dt)
@@ -53,7 +53,7 @@ function ServeState:update(dt)
             health = self.health,
             score = self.score,
             highScores = self.highScores,
-            ball = self.ball,
+            ball = self.balls,
             level = self.level,
             recoverPoints = self.recoverPoints
         })
